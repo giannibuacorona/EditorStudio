@@ -10,7 +10,7 @@ import java.util.Vector;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
-public class DBody implements Serializable {
+public class DBody extends DObject implements Serializable {
 
 	/**
 	 * 
@@ -106,8 +106,10 @@ public class DBody implements Serializable {
 	 */
 	public float gravityScale;
 
-	Vector<BodyListener> bodyListeners;
 	Vector<DJoint> dJoints;
+
+	//body listener
+	Vector<DBodyListener> bodyListeners;
 
 	public Vector<DFixture> getFixtures() {
 		return fixtures;
@@ -117,6 +119,7 @@ public class DBody implements Serializable {
 	 * quando un DBody è distrutto tutti i client dovrebbero annullare i
 	 * reference
 	 */
+	@Override
 	public void destroy() {
 
 		//annullare i reference
@@ -137,9 +140,7 @@ public class DBody implements Serializable {
 
 		dJoints = null;
 
-		BodyEvent event = new BodyEvent();
-		event.setSource(this);
-		fireDestroyed(event);
+		super.destroy();
 
 	}
 
@@ -148,10 +149,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setType(BodyType type) {
+		checkBusy();
 		this.type = type;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireTypeChanged(event);
+		busy = false;
 	}
 
 	public Vec2 getPosition() {
@@ -159,10 +163,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setPosition(Vec2 position) {
+		checkBusy();
 		this.position = position;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		firePositionChanged(event);
+		busy = false;
 	}
 
 	public float getAngle() {
@@ -170,10 +177,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setAngle(float angle) {
+		checkBusy();
 		this.angle = angle;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireAngleChanged(event);
+		busy = false;
 	}
 
 	public Vec2 getLinearVelocity() {
@@ -181,10 +191,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setLinearVelocity(Vec2 linearVelocity) {
+		checkBusy();
 		this.linearVelocity = linearVelocity;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireLinearvelocityChanged(event);
+		busy = false;
 	}
 
 	public float getAngularVelocity() {
@@ -192,10 +205,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setAngularVelocity(float angularVelocity) {
+		checkBusy();
 		this.angularVelocity = angularVelocity;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireAngularVelocityChanged(event);
+		busy = false;
 	}
 
 	public float getLinearDamping() {
@@ -203,10 +219,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setLinearDamping(float linearDamping) {
+		checkBusy();
 		this.linearDamping = linearDamping;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireLinearDampingChanged(event);
+		busy = false;
 	}
 
 	public float getAngularDamping() {
@@ -214,10 +233,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setAngularDamping(float angularDamping) {
+		checkBusy();
 		this.angularDamping = angularDamping;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireAngularDampingChanged(event);
+		busy = false;
 	}
 
 	public boolean isAllowSleep() {
@@ -225,10 +247,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setAllowSleep(boolean allowSleep) {
+		checkBusy();
 		this.allowSleep = allowSleep;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireAllowSleepChanged(event);
+		busy = false;
 	}
 
 	public boolean isAwake() {
@@ -236,10 +261,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setAwake(boolean awake) {
+		checkBusy();
 		this.awake = awake;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireAwakeChanged(event);
+		busy = false;
 	}
 
 	public boolean isFixedRotation() {
@@ -247,10 +275,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setFixedRotation(boolean fixedRotation) {
+		checkBusy();
 		this.fixedRotation = fixedRotation;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireFixedRotationChanged(event);
+		busy = false;
 	}
 
 	public boolean isBullet() {
@@ -258,10 +289,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setBullet(boolean bullet) {
+		checkBusy();
 		this.bullet = bullet;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireBulletChanged(event);
+		busy = false;
 	}
 
 	public boolean isActive() {
@@ -269,10 +303,13 @@ public class DBody implements Serializable {
 	}
 
 	public void setActive(boolean active) {
+		checkBusy();
 		this.active = active;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireActiveChanged(event);
+		busy = false;
 	}
 
 	public float getGravityScale() {
@@ -280,108 +317,104 @@ public class DBody implements Serializable {
 	}
 
 	public void setGravityScale(float gravityScale) {
+		checkBusy();
 		this.gravityScale = gravityScale;
-		BodyEvent event = new BodyEvent();
+		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
+		busy = true;
 		fireGravityScaleChanged(event);
+		busy = false;
 	}
 
 	//-----------------------------------------------------------
 
-	private void fireDestroyed(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
-			bodyListener.bodyDestroyed(event);
-		}
+	private void fireTypeChanged(DObjectEvent event) {
 
-	}
-
-	private void fireTypeChanged(BodyEvent event) {
-
-		for (BodyListener bodyListener : bodyListeners) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyTypeChanged(event);
 		}
 
 	}
 
-	private void firePositionChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void firePositionChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyPositionChanged(event);
 		}
 
 	}
 
-	private void fireAngleChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireAngleChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyAngleChanged(event);
 		}
 
 	}
 
-	private void fireLinearvelocityChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireLinearvelocityChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyLinearvelocityChanged(event);
 		}
 
 	}
 
-	private void fireAngularVelocityChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireAngularVelocityChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyAngularVelocityChanged(event);
 		}
 
 	}
 
-	private void fireLinearDampingChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireLinearDampingChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyLinearDampingChanged(event);
 		}
 
 	}
 
-	private void fireAngularDampingChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireAngularDampingChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyAngularDampingChanged(event);
 		}
 
 	}
 
-	private void fireAllowSleepChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireAllowSleepChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyAllowSleepChanged(event);
 		}
 
 	}
 
-	private void fireAwakeChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireAwakeChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyAwakeChanged(event);
 		}
 
 	}
 
-	private void fireFixedRotationChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireFixedRotationChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyFixedRotationChanged(event);
 		}
 
 	}
 
-	private void fireBulletChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireBulletChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyBulletChanged(event);
 		}
 
 	}
 
-	private void fireActiveChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireActiveChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyActiveChanged(event);
 		}
 
 	}
 
-	private void fireGravityScaleChanged(BodyEvent event) {
-		for (BodyListener bodyListener : bodyListeners) {
+	private void fireGravityScaleChanged(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyGravityScaleChanged(event);
 		}
 
