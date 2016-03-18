@@ -10,6 +10,14 @@ import java.util.Vector;
 import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
+/**
+ * I metodi setter generano eventi solo se l'oggetto "esiste" cioè fa parte del
+ * game content.
+ * 
+ * @author gianni
+ *
+ */
+
 public class DBody extends DObject implements Serializable {
 
 	/**
@@ -109,10 +117,27 @@ public class DBody extends DObject implements Serializable {
 	Vector<DJoint> dJoints;
 
 	//body listener
-	Vector<DBodyListener> bodyListeners;
+	transient Vector<DBodyListener> bodyListeners;
 
 	public Vector<DFixture> getFixtures() {
 		return fixtures;
+	}
+
+	public DBody() {
+		super();
+		bodyListeners = new Vector<>();
+		fixtures = new Vector<>();
+		dJoints = new Vector<>();
+
+	}
+
+	public void addDBodyListener(DBodyListener listener) {
+
+		if (!bodyListeners.contains(listener)) {
+
+			bodyListeners.add(listener);
+
+		}
 	}
 
 	/**
@@ -153,9 +178,13 @@ public class DBody extends DObject implements Serializable {
 		this.type = type;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireTypeChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireTypeChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public Vec2 getPosition() {
@@ -167,9 +196,13 @@ public class DBody extends DObject implements Serializable {
 		this.position = position;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		firePositionChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			firePositionChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public float getAngle() {
@@ -181,9 +214,13 @@ public class DBody extends DObject implements Serializable {
 		this.angle = angle;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireAngleChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireAngleChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public Vec2 getLinearVelocity() {
@@ -195,9 +232,13 @@ public class DBody extends DObject implements Serializable {
 		this.linearVelocity = linearVelocity;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireLinearvelocityChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireLinearvelocityChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public float getAngularVelocity() {
@@ -209,9 +250,13 @@ public class DBody extends DObject implements Serializable {
 		this.angularVelocity = angularVelocity;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireAngularVelocityChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireAngularVelocityChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public float getLinearDamping() {
@@ -223,9 +268,13 @@ public class DBody extends DObject implements Serializable {
 		this.linearDamping = linearDamping;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireLinearDampingChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireLinearDampingChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public float getAngularDamping() {
@@ -237,9 +286,13 @@ public class DBody extends DObject implements Serializable {
 		this.angularDamping = angularDamping;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireAngularDampingChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireAngularDampingChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public boolean isAllowSleep() {
@@ -251,9 +304,12 @@ public class DBody extends DObject implements Serializable {
 		this.allowSleep = allowSleep;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireAllowSleepChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireAllowSleepChanged(event);
+			busy = false;
+		}
 	}
 
 	public boolean isAwake() {
@@ -265,9 +321,11 @@ public class DBody extends DObject implements Serializable {
 		this.awake = awake;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireAwakeChanged(event);
-		busy = false;
+		if (exists()) {
+			busy = true;
+			fireAwakeChanged(event);
+			busy = false;
+		}
 	}
 
 	public boolean isFixedRotation() {
@@ -279,9 +337,13 @@ public class DBody extends DObject implements Serializable {
 		this.fixedRotation = fixedRotation;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireFixedRotationChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireFixedRotationChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public boolean isBullet() {
@@ -293,9 +355,13 @@ public class DBody extends DObject implements Serializable {
 		this.bullet = bullet;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireBulletChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireBulletChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public boolean isActive() {
@@ -307,9 +373,13 @@ public class DBody extends DObject implements Serializable {
 		this.active = active;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireActiveChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireActiveChanged(event);
+			busy = false;
+		}
+
 	}
 
 	public float getGravityScale() {
@@ -321,9 +391,13 @@ public class DBody extends DObject implements Serializable {
 		this.gravityScale = gravityScale;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
-		busy = true;
-		fireGravityScaleChanged(event);
-		busy = false;
+
+		if (exists()) {
+			busy = true;
+			fireGravityScaleChanged(event);
+			busy = false;
+		}
+
 	}
 
 	//-----------------------------------------------------------

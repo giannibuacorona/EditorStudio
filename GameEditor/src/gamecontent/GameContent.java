@@ -9,9 +9,18 @@ public class GameContent {
 
 	Vector<DObjectListener> listeners;
 
+	public GameContent() {
+		super();
+		init();
+	}
+
 	boolean remove(Object o) {
 
 		return collection.remove(o);
+	}
+
+	public boolean contains(Object o) {
+		return collection.contains(o);
 	}
 
 	/*
@@ -26,6 +35,7 @@ public class GameContent {
 			throw new IllegalStateException("Object already added!");
 
 		boolean res = collection.add(e);
+		e.gameContent = this;
 
 		DObjectEvent event = new DObjectEvent();
 
@@ -39,6 +49,28 @@ public class GameContent {
 		e.setBusy(false);
 
 		return res;
+	}
+
+	public void addDObjectListener(DObjectListener listener) {
+
+		if (!listeners.contains(listener))
+			listeners.add(listener);
+
+	}
+
+	private void init() {
+
+		collection = new Vector<>();
+		listeners = new Vector<>();
+
+	}
+
+	void fireObjectDestroyed(DObjectEvent event) {
+
+		for (DObjectListener dObjectListener : listeners) {
+
+			dObjectListener.objectDestroyed(event);
+		}
 	}
 
 }
