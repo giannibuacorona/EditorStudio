@@ -14,7 +14,7 @@ import org.jbox2d.dynamics.joints.JointType;
  * @author gianni
  *
  */
-public class DJoint implements Serializable {
+public class DJoint extends DObject implements Serializable {
 
 	/**
 	 * 
@@ -41,6 +41,28 @@ public class DJoint implements Serializable {
 	 */
 	public boolean collideConnected;
 
+	/**
+	 * Distrugge un DJoint. Un oggetto distrutto non deve più essere utilizzato
+	 * per cui imposta a null le variabili di tipo DJoint nel tuo codice. Questo
+	 * vale per tutti i sottotipi di DObject.
+	 * 
+	 */
+	@Override
+	public void destroy() {
+
+		super.destroy();
+		//impostare a null tutti i reference che puntano a this
+		if (bodyA != null) {
+			bodyA.remove(this);
+			bodyA = null;
+		}
+		if (bodyB != null) {
+			bodyB.remove(this);
+			bodyB = null;
+		}
+
+	}
+
 	public DBody getBodyA() {
 		return bodyA;
 	}
@@ -52,19 +74,24 @@ public class DJoint implements Serializable {
 	 */
 	public void setBodyA(DBody bodyA) {
 
-		if (this.bodyB == bodyA)
-			throw new IllegalStateException("bodyA == bodyB");
+		if (bodyA != null) {
+
+			if (this.bodyB == bodyA)
+				throw new IllegalStateException("bodyA == bodyB");
+
+		}
 
 		if (this.bodyA != null) {
 
 			//il bodyA corrente non ha più this giunto
-			this.bodyA.dJoints.remove(this);
+			this.bodyA.remove(this);
 
 		}
 
 		this.bodyA = bodyA;
+
 		if (bodyA != null)
-			bodyA.dJoints.add(this);
+			bodyA.add(this);
 	}
 
 	public DBody getBodyB() {
@@ -78,17 +105,32 @@ public class DJoint implements Serializable {
 	 */
 	public void setBodyB(DBody bodyB) {
 
-		if (this.bodyA == bodyB)
-			throw new IllegalStateException("bodyA == bodyB");
+		if (bodyB != null) {
+
+			if (this.bodyB == bodyA)
+				throw new IllegalStateException("bodyA == bodyB");
+
+		}
 
 		if (this.bodyB != null) {
 			//il bodyB corrente non ha più this giunto
-			this.bodyB.dJoints.remove(this);
+			this.bodyB.remove(this);
 		}
 
 		this.bodyB = bodyB;
+
 		if (bodyB != null)
-			bodyB.dJoints.add(this);
+			bodyB.add(this);
+	}
+
+	void remove(DBody body) {
+
+		if (bodyA == body) {
+			bodyA = null;
+		} else if (bodyB == body) {
+			bodyB = null;
+		} else
+			throw new IllegalStateException("Mega bug! DJoint non contiene this DBody.");
 	}
 
 	public JointType getType() {

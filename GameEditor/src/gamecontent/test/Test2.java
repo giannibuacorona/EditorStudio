@@ -27,17 +27,12 @@ public class Test2 {
 
 		GameContent content = new GameContent();
 
-		DBody body = new DBody();
+		DObjectListener listener = new Ascoltatore();
+		content.addDObjectListener(listener);
+
+		DBody body = content.createDBody();
 
 		System.out.println("exists? " + body.exists());
-
-		DObjectListener listener = new Ascoltatore();
-
-		content.addDObjectListener(listener);
-		//body.addDObjectListener(listener);
-
-		System.out.println("adding body to content ...");
-		content.add(body);
 
 		System.out.println("destroying body ...");
 		body.destroy();

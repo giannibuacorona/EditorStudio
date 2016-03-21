@@ -9,14 +9,13 @@ public class Test1 {
 
 		GameContent content = new GameContent();
 
-		DBody body = new DBody();
+		DBody body = content.createDBody();
 
 		System.out.println(body);
 
-		content.add(body);
-		System.out.println("Body added to content.");
-		System.out.println(body);
+		body.destroy();
 
+		System.out.println(body);
 	}
 
 }

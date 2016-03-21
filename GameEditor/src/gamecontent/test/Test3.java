@@ -126,59 +126,23 @@ public class Test3 {
 
 		GameContent content = new GameContent();
 
-		DBody body = new DBody();
-
-		System.out.println(body);
-		System.out.println("\n\n");
-
-		DFixture fixture = new DFixture();
-
-		System.out.println(fixture);
-		System.out.println("\n\n");
-
 		DObjectListener listener = new Ascoltatore();
+		content.addDObjectListener(listener);
 
-		//content.addDObjectListener(listener);
-		body.addDObjectListener(listener);
+		DBody body = content.createDBody();
+		DFixture fixture = content.createDFixture();
 
 		DBodyListener listener2 = new AscoltaBody();
 		body.addDBodyListener(listener2);
 
-		System.out.println("adding body to content ...");
-		content.add(body);
-
-		System.out.println("adding fixture to content ...");
-		content.add(fixture);
-
-		System.out.println("\n\n");
-
-		System.out.println(body);
-		System.out.println("\n\n");
-
-		System.out.println(fixture);
-		System.out.println("\n\n");
-
 		System.out.println("adding fixture to body ...");
 		body.addFixture(fixture);
-
-		System.out.println("\n\n");
-
-		System.out.println(body);
-		System.out.println("\n\n");
-
-		System.out.println(fixture);
-		System.out.println("\n\n");
 
 		System.out.println("destroying body ...");
 		body.destroy();
 
-		System.out.println("\n\n");
-
-		System.out.println(body);
-		System.out.println("\n\n");
-
-		System.out.println(fixture);
-		System.out.println("\n\n");
+		System.out.println("destroying fixture ...");
+		fixture.destroy();
 
 	}
 

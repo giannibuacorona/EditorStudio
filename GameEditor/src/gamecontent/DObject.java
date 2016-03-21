@@ -19,7 +19,7 @@ public class DObject {
 	 */
 	protected boolean busy;
 
-	protected DObject() {
+	DObject() {
 		super();
 		init();
 	}
@@ -31,23 +31,8 @@ public class DObject {
 
 	public void destroy() {
 
-		checkBusy();
-		if (!exists()) {
-			throw new IllegalStateException("Object doesn't exist!");
-		}
-		busy = true;
-
-		DObjectEvent event = new DObjectEvent();
-		event.setSource(this);
-		fireObjectDestroyed(event);
-
-		gameContent.fireObjectDestroyed(event);
-
-		//non esiste più:
-		gameContent.remove(this);
-		this.gameContent = null;
-
-		busy = false;
+		if (exists())
+			gameContent.destroy(this);
 
 	}
 

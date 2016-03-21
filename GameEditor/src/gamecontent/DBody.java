@@ -11,8 +11,8 @@ import org.jbox2d.common.Vec2;
 import org.jbox2d.dynamics.BodyType;
 
 /**
- * I metodi setter generano eventi solo se l'oggetto "esiste" cioè fa parte del
- * game content.
+ * 
+ * I metodi setter generano eventi solo se l'oggetto non è stato distrutto.
  * 
  * @author gianni
  *
@@ -123,7 +123,7 @@ public class DBody extends DObject implements Serializable {
 		return fixtures;
 	}
 
-	public DBody() {
+	DBody() {
 		super();
 		bodyListeners = new Vector<>();
 		fixtures = new Vector<>();
@@ -141,32 +141,30 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	/**
-	 * quando un DBody è distrutto tutti i client dovrebbero annullare i
-	 * reference
+	 * Distrugge un DBody. Un oggetto distrutto non deve più essere utilizzato
+	 * per cui imposta a null le variabili di tipo DBody nel tuo codice. Questo
+	 * vale per tutti i sottotipi di DObject.
+	 * 
 	 */
 	@Override
 	public void destroy() {
 
+		super.destroy();
 		//annullare i reference
 		//if(fixtures != null) {
 		for (DFixture dFixture : fixtures) {
 			dFixture.owner = null;
 		}
 
-		fixtures = null;
+		fixtures = null; //tanto non si deve più usare...
 
 		for (DJoint dJoint : dJoints) {
-			if (dJoint.bodyA == this) {
-				dJoint.bodyA = null;
-			} else if (dJoint.bodyB == this) {
-				dJoint.bodyB = null;
-			} else
-				throw new IllegalStateException("Mega bug! DJoint non contiene this DBody.");
+
+			dJoint.remove(this);
+
 		}
 
-		dJoints = null;
-
-		super.destroy();
+		dJoints = null; //tanto non si deve più usare...
 
 	}
 
@@ -543,6 +541,22 @@ public class DBody extends DObject implements Serializable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+
+	}
+
+	void remove(DJoint dJoint) {
+
+		if (!dJoints.contains(dJoint))
+			throw new IllegalStateException("DJoint not in this DBody1");
+		dJoints.remove(dJoint);
+
+	}
+
+	void add(DJoint dJoint) {
+
+		if (dJoints.contains(dJoint))
+			throw new IllegalStateException("DJoint already in DBody!");
+		dJoints.add(dJoint);
 
 	}
 

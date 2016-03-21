@@ -11,6 +11,11 @@ public class DFixture extends DObject implements Serializable {
 	 */
 	DBody owner;
 
+	DFixture() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
 	/**
 	 * The shape, this must be set. The shape will be cloned, so you can create
 	 * the shape on the stack.
