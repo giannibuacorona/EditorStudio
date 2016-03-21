@@ -11,11 +11,11 @@ public class Test1 {
 
 		DBody body = new DBody();
 
-		System.out.println("exists? " + body.exists());
+		System.out.println(body);
 
 		content.add(body);
 		System.out.println("Body added to content.");
-		System.out.println("exists? " + body.exists());
+		System.out.println(body);
 
 	}
 

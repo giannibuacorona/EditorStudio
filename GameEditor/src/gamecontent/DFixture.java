@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.jbox2d.dynamics.Filter;
 
-public class DFixture implements Serializable {
+public class DFixture extends DObject implements Serializable {
 
 	/*
 	 * Una fixtura appartiene ad un body
@@ -69,7 +69,24 @@ public class DFixture implements Serializable {
 	}
 
 	public void setFriction(float friction) {
+
+		checkBusy();
 		this.friction = friction;
+
+		DObjectEvent event = new DObjectEvent();
+		event.setSource(this);
+
+		if (exists()) {
+			busy = true;
+			fireFrictionChanged(event);
+			busy = false;
+		}
+
+	}
+
+	private void fireFrictionChanged(DObjectEvent event) {
+		// TODO Auto-generated method stub
+
 	}
 
 	public float getRestitution() {

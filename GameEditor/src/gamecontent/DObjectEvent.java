@@ -8,4 +8,8 @@ public class DObjectEvent {
 		this.source = object;
 	}
 
+	public DObject getSource() {
+		return source;
+	}
+
 }

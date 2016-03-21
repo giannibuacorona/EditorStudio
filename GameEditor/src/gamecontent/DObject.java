@@ -51,6 +51,11 @@ public class DObject {
 
 	}
 
+	@Override
+	public String toString() {
+		return "DObject [gameContent=" + gameContent + ", dObjectListeners=" + dObjectListeners + ", busy=" + busy + ", exists()=" + exists() + "]";
+	}
+
 	protected void fireObjectDestroyed(DObjectEvent event) {
 		// TODO Auto-generated method stub
 		for (DObjectListener dObjectListener : dObjectListeners) {

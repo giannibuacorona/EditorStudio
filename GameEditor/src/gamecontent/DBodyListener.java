@@ -30,4 +30,6 @@ public interface DBodyListener {
 
 	void bodyDestroyed(DObjectEvent event);
 
+	void fixtureAdded(DObjectEvent event);
+
 }

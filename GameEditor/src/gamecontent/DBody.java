@@ -26,11 +26,6 @@ public class DBody extends DObject implements Serializable {
 	private static final long serialVersionUID = 1L;
 	//BodyDef bodyDef = new BodyDef();
 
-	/*
-	 * 1 body può avere molte fixture, 1 fixtura appartiene ad un solo body
-	 */
-	Vector<DFixture> fixtures = new Vector<>();
-
 	/**
 	 * The body type: static, kinematic, or dynamic. Note: if a dynamic body
 	 * would have zero mass, the mass is set to one.
@@ -116,6 +111,11 @@ public class DBody extends DObject implements Serializable {
 
 	Vector<DJoint> dJoints;
 
+	/*
+	 * 1 body può avere molte fixture, 1 fixtura appartiene ad un solo body
+	 */
+	Vector<DFixture> fixtures = new Vector<>();
+
 	//body listener
 	transient Vector<DBodyListener> bodyListeners;
 
@@ -148,6 +148,7 @@ public class DBody extends DObject implements Serializable {
 	public void destroy() {
 
 		//annullare i reference
+		//if(fixtures != null) {
 		for (DFixture dFixture : fixtures) {
 			dFixture.owner = null;
 		}
@@ -257,6 +258,32 @@ public class DBody extends DObject implements Serializable {
 			busy = false;
 		}
 
+	}
+
+	public void addFixture(DFixture e) {
+		checkBusy();
+		if (!e.exists())
+			throw new IllegalStateException("Fixture does not exeist!");
+
+		if (fixtures.contains(e))
+			throw new IllegalArgumentException("Fixture already in body");
+
+		fixtures.add(e);
+
+		DObjectEvent event = new DObjectEvent();
+		event.setSource(this);
+
+		if (exists()) {
+			busy = true;
+			fireFixtureAdded(event);
+			busy = false;
+		}
+
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "\nDBody [fixtures=" + fixtures + ", dJoints=" + dJoints + ", bodyListeners=" + bodyListeners + "]";
 	}
 
 	public float getLinearDamping() {
@@ -490,6 +517,13 @@ public class DBody extends DObject implements Serializable {
 	private void fireGravityScaleChanged(DObjectEvent event) {
 		for (DBodyListener bodyListener : bodyListeners) {
 			bodyListener.bodyGravityScaleChanged(event);
+		}
+
+	}
+
+	private void fireFixtureAdded(DObjectEvent event) {
+		for (DBodyListener bodyListener : bodyListeners) {
+			bodyListener.fixtureAdded(event);
 		}
 
 	}

@@ -31,6 +31,9 @@ public class GameContent {
 
 		e.checkBusy();
 
+		if (e.gameContent != null)
+			throw new IllegalStateException("e.gameContent not null!");
+
 		if (collection.contains(e))
 			throw new IllegalStateException("Object already added!");
 
@@ -42,10 +45,12 @@ public class GameContent {
 		event.setSource(e);
 
 		e.setBusy(true);
+
 		for (DObjectListener dObjectListener : listeners) {
 
 			dObjectListener.objectCreated(event);
 		}
+
 		e.setBusy(false);
 
 		return res;
