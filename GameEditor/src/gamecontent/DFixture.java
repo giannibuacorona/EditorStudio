@@ -75,16 +75,16 @@ public class DFixture extends DObject implements Serializable {
 
 	public void setFriction(float friction) {
 
-		checkBusy();
+		checkStatus();
 		this.friction = friction;
 
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireFrictionChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}

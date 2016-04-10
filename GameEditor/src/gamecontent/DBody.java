@@ -173,15 +173,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setType(BodyType type) {
-		checkBusy();
+		checkStatus();
 		this.type = type;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireTypeChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -191,15 +191,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setPosition(Vec2 position) {
-		checkBusy();
+		checkStatus();
 		this.position = position;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			firePositionChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -209,15 +209,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setAngle(float angle) {
-		checkBusy();
+		checkStatus();
 		this.angle = angle;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireAngleChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -227,15 +227,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setLinearVelocity(Vec2 linearVelocity) {
-		checkBusy();
+		checkStatus();
 		this.linearVelocity = linearVelocity;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireLinearvelocityChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -245,21 +245,21 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setAngularVelocity(float angularVelocity) {
-		checkBusy();
+		checkStatus();
 		this.angularVelocity = angularVelocity;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireAngularVelocityChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
 
 	public void addFixture(DFixture e) {
-		checkBusy();
+		checkStatus();
 		if (!e.exists())
 			throw new IllegalStateException("Fixture does not exeist!");
 
@@ -272,9 +272,9 @@ public class DBody extends DObject implements Serializable {
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireFixtureAdded(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -289,15 +289,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setLinearDamping(float linearDamping) {
-		checkBusy();
+		checkStatus();
 		this.linearDamping = linearDamping;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireLinearDampingChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -307,15 +307,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setAngularDamping(float angularDamping) {
-		checkBusy();
+		checkStatus();
 		this.angularDamping = angularDamping;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireAngularDampingChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -325,15 +325,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setAllowSleep(boolean allowSleep) {
-		checkBusy();
+		checkStatus();
 		this.allowSleep = allowSleep;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireAllowSleepChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 	}
 
@@ -342,14 +342,14 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setAwake(boolean awake) {
-		checkBusy();
+		checkStatus();
 		this.awake = awake;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireAwakeChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 	}
 
@@ -358,15 +358,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setFixedRotation(boolean fixedRotation) {
-		checkBusy();
+		checkStatus();
 		this.fixedRotation = fixedRotation;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireFixedRotationChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -376,15 +376,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setBullet(boolean bullet) {
-		checkBusy();
+		checkStatus();
 		this.bullet = bullet;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireBulletChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -394,15 +394,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setActive(boolean active) {
-		checkBusy();
+		checkStatus();
 		this.active = active;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireActiveChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}
@@ -412,15 +412,15 @@ public class DBody extends DObject implements Serializable {
 	}
 
 	public void setGravityScale(float gravityScale) {
-		checkBusy();
+		checkStatus();
 		this.gravityScale = gravityScale;
 		DObjectEvent event = new DObjectEvent();
 		event.setSource(this);
 
 		if (exists()) {
-			busy = true;
+			getOnly = true;
 			fireGravityScaleChanged(event);
-			busy = false;
+			getOnly = false;
 		}
 
 	}

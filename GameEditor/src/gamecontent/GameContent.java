@@ -3,9 +3,13 @@ package gamecontent;
 import java.util.Collection;
 import java.util.Vector;
 
+/*
+ * TODO: Lo stato GETONLY riguarda anche le modifiche strutturali? Durante una notifica cioè non si devono
+ * poter creare o distruggere oggetti?
+ */
 /**
- * Fornisce una descrizione dei contenuti del gioco e notifica le modifiche di
- * creazione e distruzione che avvengono ai contenuti. Presso un GameContent si
+ * Gestisce la collezione degli oggetti del modello. notifica le modifiche di
+ * creazione e distruzione di oggetti del modello. Presso un GameContent si
  * possono registrare più ascoltatori.
  * 
  * @author gianni
@@ -29,7 +33,7 @@ public class GameContent {
 	/**
 	 * Crea un DBody e notifica agli ascoltatori la creazione del nuovo oggetto
 	 * 
-	 * @return
+	 * @return l'oggetto creato
 	 */
 
 	public DBody createDBody() {
@@ -44,7 +48,7 @@ public class GameContent {
 	 * Crea un DFixture e notifica agli ascoltatori la creazione del nuovo
 	 * oggetto
 	 * 
-	 * @return
+	 * @return l'oggetto creato
 	 */
 
 	public DFixture createDFixture() {
@@ -59,13 +63,17 @@ public class GameContent {
 	 * Crea un DRevoluteJoint e notifica agli ascoltatori la creazione del nuovo
 	 * oggetto
 	 * 
-	 * @return
+	 * @return l'oggetto creato
 	 */
 
 	public DRevoluteJoint createDRevoluteJoint() {
 
 		DRevoluteJoint res = new DRevoluteJoint();
 		add(res);
+		/*
+		 * TODO: metere qua la notifica agli ascolatatori in modo da notificare
+		 * fireRevoluteJointCreated invece di fireObjectCreated
+		 */
 		return res;
 	}
 
@@ -74,7 +82,7 @@ public class GameContent {
 	 */
 	void destroy(DObject object) {
 
-		object.checkBusy();
+		object.checkStatus();
 
 		//oggetto già distrutto
 		if (!object.exists())
@@ -85,13 +93,15 @@ public class GameContent {
 
 		object.gameContent = null;
 
-		object.setBusy(true);
+		object.setGetOnly(true);
 
+		//notifica ascoltatori registrati presso il game content
 		fireObjectDestroyed(event);
 
+		//notifica ascoltatori dell'oggetto
 		object.fireObjectDestroyed(event);
 
-		object.setBusy(false);
+		object.setGetOnly(false);
 
 		collection.remove(object);
 	}
@@ -113,17 +123,24 @@ public class GameContent {
 
 		event.setSource(e);
 
-		e.setBusy(true);
+		//TODO: fireXxxCreated o solo fireObjectCreated?
+		e.setGetOnly(true);
 
 		for (DObjectListener dObjectListener : listeners) {
 
 			dObjectListener.objectCreated(event);
 		}
 
-		e.setBusy(false);
+		e.setGetOnly(false);
 
 	}
 
+	/**
+	 * Registra un ascoltatore
+	 * 
+	 * @param listener
+	 *            l'ascoltatore
+	 */
 	public void addDObjectListener(DObjectListener listener) {
 
 		if (!listeners.contains(listener))
@@ -131,6 +148,9 @@ public class GameContent {
 
 	}
 
+	/*
+	 * notifica agli ascoltatori l'evento di distruzione di un oggetto
+	 */
 	void fireObjectDestroyed(DObjectEvent event) {
 
 		for (DObjectListener dObjectListener : listeners) {

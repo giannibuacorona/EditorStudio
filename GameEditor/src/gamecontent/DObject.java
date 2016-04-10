@@ -2,8 +2,20 @@ package gamecontent;
 
 import java.util.Vector;
 
+/*
+ * TODO: fire-event contengono solo il loop di notifica: incorporare la gestione dello stato GET_ONLY
+ * in modo che chi volesse propagare l'evento possa farlo senza preoccuparsi del problema dello stato.
+ * 
+ */
+
 /**
  * classe antenata di tutti gli oggetti del game content
+ * 
+ * GET ONLY <br/>
+ * Durante una notifica agli ascoltatori (fire-event) gli oggetti del game
+ * content sono in stato GET_ONLY. Non è possibile effettuare nessuna modifica
+ * al modello, ne di dati ne strutturale. Alla fine del loop di notifica gli
+ * oggetti rientrano nello stato normale.
  * 
  * @author gianni
  *
@@ -13,15 +25,15 @@ public class DObject {
 	protected GameContent gameContent;
 	protected Vector<DObjectListener> dObjectListeners;
 	/*
-	 * Un DObject è busy durante la propagazione di un DObjectEvent, per evitare
-	 * che un ascoltatore modifichi l'oggetto prima che la propagazione della
-	 * modifica precedente sia ultimata.
+	 * Un DObject è GET_ONLY durante la propagazione di un DObjectEvent, per
+	 * evitare che un ascoltatore modifichi l'oggetto prima che la propagazione
+	 * della modifica precedente sia ultimata.
 	 */
-	protected boolean busy;
+	protected boolean getOnly;
 
 	DObject() {
 		super();
-		init();
+		dObjectListeners = new Vector<>();
 	}
 
 	public void addDObjectListener(DObjectListener listener) {
@@ -38,25 +50,25 @@ public class DObject {
 
 	@Override
 	public String toString() {
-		return "DObject [gameContent=" + gameContent + ", dObjectListeners=" + dObjectListeners + ", busy=" + busy + ", exists()=" + exists() + "]";
+		return "DObject [gameContent=" + gameContent + ", dObjectListeners=" + dObjectListeners + ", busy=" + getOnly + ", exists()=" + exists() + "]";
 	}
 
 	protected void fireObjectDestroyed(DObjectEvent event) {
-		// TODO Auto-generated method stub
+
 		for (DObjectListener dObjectListener : dObjectListeners) {
 			dObjectListener.objectDestroyed(event);
 		}
 
 	}
 
-	protected void checkBusy() {
+	protected void checkStatus() {
 
-		if (busy)
-			throw new IllegalStateException("Busy object!");
+		if (getOnly)
+			throw new IllegalStateException("Status: GET_ONLY");
 	}
 
-	/*
-	 * Un oggetto esiste se e solo se è aggiunto al game content
+	/**
+	 * Un oggetto esiste se e solo se è contenuto nel game content
 	 */
 	public boolean exists() {
 
@@ -64,15 +76,9 @@ public class DObject {
 
 	}
 
-	void setBusy(boolean busy) {
+	void setGetOnly(boolean getOnly) {
 
-		this.busy = busy;
-
-	}
-
-	private void init() {
-
-		dObjectListeners = new Vector<>();
+		this.getOnly = getOnly;
 
 	}
 

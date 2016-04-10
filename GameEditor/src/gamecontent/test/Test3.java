@@ -116,6 +116,7 @@ public class Test3 {
 
 			DBody body = (DBody) event.getSource();
 
+			//body.setActive(true); //excepion (get only)
 			System.out.println("ASCOLTA BODY: Fixture added: " + body.getFixtures().lastElement());
 
 		}
