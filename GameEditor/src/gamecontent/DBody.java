@@ -1,9 +1,5 @@
 package gamecontent;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.Vector;
 
@@ -528,19 +524,21 @@ public class DBody extends DObject implements Serializable {
 
 	public static void main(String[] args) {
 
-		try {
-			FileOutputStream fileOutputStream = new FileOutputStream("DBody3.dat");
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-			DBody obj = new DBody();
-			obj.fixtures.add(new DFixture());
-			objectOutputStream.writeObject(obj);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		//prove di serializzazione
+
+		//		try {
+		//			FileOutputStream fileOutputStream = new FileOutputStream("DBody3.dat");
+		//			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+		//			DBody obj = new DBody();
+		//			obj.fixtures.add(new DFixture());
+		//			objectOutputStream.writeObject(obj);
+		//		} catch (FileNotFoundException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		} catch (IOException e) {
+		//			// TODO Auto-generated catch block
+		//			e.printStackTrace();
+		//		}
 
 	}
 
